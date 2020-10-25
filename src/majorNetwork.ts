@@ -1,5 +1,11 @@
 import {Address4} from 'ip-address';
-import {CidrMaskSize, DoRequirementsFit, RequirementsHostsCount} from './utils';
+import {
+  CidrMaskSize,
+  CidrMaskToDottedDecimal,
+  DoRequirementsFit,
+  DottedDecimalToWildcard,
+  RequirementsHostsCount,
+} from './utils';
 
 /**
  * Interface representing the requirements for a subnet.
@@ -14,15 +20,94 @@ export interface SubnetRequirements {
 }
 
 /**
- * Interface representing a subnet, with its intended requirements
+ * Class representing a subnet, with its intended requirements
  * and its ipv4 address
  *
  * @export
- * @interface Subnet
+ * @class Subnet
  */
-export interface Subnet {
-  address: Address4;
-  requirements: SubnetRequirements;
+export class Subnet {
+  /**
+   * Address representing this subnet
+   *
+   * @type {Address4}
+   * @memberof Subnet
+   */
+  public readonly address: Address4;
+
+  /**
+   * Requirements of the subnet
+   *
+   * @type {SubnetRequirements}
+   * @memberof Subnet
+   */
+  public readonly requirements: SubnetRequirements;
+
+  /**
+   *Creates an instance of Subnet.
+   * @param {Address4} a Address
+   * @param {SubnetRequirements} r Requirements
+   * @memberof Subnet
+   */
+  constructor(a: Address4, r: SubnetRequirements) {
+    this.address = a;
+    this.requirements = r;
+  }
+
+  /**
+   * Size of the network (how many hosts excluding the network and broadcast addresses)
+   *
+   * @readonly
+   * @type {number}
+   * @memberof Subnet
+   */
+  public get networkSize(): number {
+    return CidrMaskSize(this.address.subnetMask);
+  }
+
+  /**
+   *
+   * Number of unused/unallocated hosts in the subnet
+   * @readonly
+   * @type {number}
+   * @memberof Subnet
+   */
+  public get unusedSize(): number {
+    return this.requirements.size - this.networkSize;
+  }
+
+  /**
+   *
+   * The subnet mask in dotted-decimal notation xxx.xxx.xxx.xxx
+   * @readonly
+   * @type {string}
+   * @memberof Subnet
+   */
+  public get subnetMaskDottedDecimal(): string {
+    return CidrMaskToDottedDecimal(this.address.subnetMask);
+  }
+
+  /**
+   *
+   * The dotted-decimal subnet mask wildcard/inverse
+   * @readonly
+   * @type {string}
+   * @memberof Subnet
+   */
+  public get subnetMaskWildcard(): string {
+    return DottedDecimalToWildcard(this.subnetMaskDottedDecimal);
+  }
+
+  /**
+   *
+   * The efficiency of this subnet
+   * @readonly
+   * @type {number}
+   * @memberof IPv4Network
+   */
+  public get efficiency(): number {
+    return this.requirements.size / (this.unusedSize + this.requirements.size);
+  }
 }
 
 /**
@@ -40,16 +125,28 @@ export class IPv4Network {
   /**
    * Creates an instance of IPv4Network.
    * @param {SubnetRequirements[]} requirements Array of requirements for the desired subnets
-   * @param {Address4} majorNetwork Major network that will be subnetted
+   * @param {string} majorNetwork Major network that will be subnetted in slash notation x.x.x.x/xx
    * @memberof IPv4Network
    */
-  constructor(requirements: SubnetRequirements[], majorNetwork: Address4) {
+  constructor(requirements: SubnetRequirements[], majorNetwork: string) {
     this._subnets = [];
     this._requirements = requirements;
-    this._majorNetwork = majorNetwork;
-    const reqFit = DoRequirementsFit(requirements, majorNetwork);
+    if (majorNetwork.indexOf('/') === -1) {
+      throw 'Address must be in slash notation';
+    }
+    try {
+      this._majorNetwork = new Address4(majorNetwork);
+    } catch (e) {
+      throw `Unable to parse "${majorNetwork}" to an address`;
+    }
+
+    if (!this._majorNetwork.isCorrect) {
+      throw `"${majorNetwork}" is incorrect`;
+    }
+
+    const reqFit = DoRequirementsFit(requirements, this._majorNetwork);
     if (!reqFit) {
-      throw `Unable to fit requirements into a ${majorNetwork.subnet} network`;
+      throw `Unable to fit requirements into a ${this._majorNetwork.subnet} network`;
     }
 
     this.calculate();
@@ -147,10 +244,7 @@ export class IPv4Network {
       const subnet = new Address4(
         `${subnettingNetworkStart.addressMinusSuffix}/${suffix}`
       );
-      this._subnets.push({
-        address: subnet,
-        requirements: r,
-      });
+      this._subnets.push(new Subnet(subnet, r));
 
       if (subnet.addressMinusSuffix) {
         const currentNetworkAddress = subnet.addressMinusSuffix?.split('.');
