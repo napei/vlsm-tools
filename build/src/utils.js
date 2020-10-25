@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReduceRequirementsCount = exports.DoRequirementsFit = exports.CidrSize = exports.DottedDecimalToWildcard = exports.CidrMaskToDottedDecimal = void 0;
 function CidrMaskToDottedDecimal(prefix) {
-    const mask = 0xffffffff << (32 - prefix);
-    const maskStr = [
+    var mask = 0xffffffff << (32 - prefix);
+    var maskStr = [
         mask >>> 24,
         (mask >> 16) & 0xff,
         (mask >> 8) & 0xff,
@@ -15,7 +15,7 @@ exports.CidrMaskToDottedDecimal = CidrMaskToDottedDecimal;
 function DottedDecimalToWildcard(dd) {
     return dd
         .split('.')
-        .map(d => 255 - parseInt(d))
+        .map(function (d) { return 255 - parseInt(d); })
         .join('.');
 }
 exports.DottedDecimalToWildcard = DottedDecimalToWildcard;
@@ -26,13 +26,13 @@ function CidrSize(c) {
 }
 exports.CidrSize = CidrSize;
 function DoRequirementsFit(requirements, majorNetwork) {
-    const majSize = CidrSize(majorNetwork.subnetMask);
-    const reqSize = ReduceRequirementsCount(requirements);
+    var majSize = CidrSize(majorNetwork.subnetMask);
+    var reqSize = ReduceRequirementsCount(requirements);
     return reqSize < majSize;
 }
 exports.DoRequirementsFit = DoRequirementsFit;
 function ReduceRequirementsCount(r) {
-    return r.reduce((a, b) => {
+    return r.reduce(function (a, b) {
         return a + b.size;
     }, 0);
 }
