@@ -3,7 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IPv4Network = void 0;
 var ip_address_1 = require("ip-address");
 var utils_1 = require("./utils");
+/**
+ * Class representing an IPv4 Network that will contain
+ * several subnets
+ *
+ * @export
+ * @class IPv4Network
+ */
 var IPv4Network = /** @class */ (function () {
+    /**
+     * Creates an instance of IPv4Network.
+     * @param {SubnetRequirements[]} requirements Array of requirements for the desired subnets
+     * @param {Address4} majorNetwork Major network that will be subnetted
+     * @memberof IPv4Network
+     */
     function IPv4Network(requirements, majorNetwork) {
         this._subnets = [];
         this._requirements = requirements;
@@ -15,20 +28,42 @@ var IPv4Network = /** @class */ (function () {
         this.calculate();
     }
     Object.defineProperty(IPv4Network.prototype, "requiredSize", {
+        /**
+         *
+         * The required size of the network based on the requirements
+         * @readonly
+         * @type {number}
+         * @memberof IPv4Network
+         */
         get: function () {
-            return utils_1.ReduceRequirementsCount(this._requirements);
+            return utils_1.RequirementsHostsCount(this._requirements);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(IPv4Network.prototype, "networkSize", {
+        /**
+         *
+         * The number of usable hosts in the major network
+         * Excludes the network and broadcast addresses
+         * @readonly
+         * @type {number}
+         * @memberof IPv4Network
+         */
         get: function () {
-            return utils_1.CidrSize(this._majorNetwork.subnetMask);
+            return utils_1.CidrMaskSize(this._majorNetwork.subnetMask);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(IPv4Network.prototype, "unusedSize", {
+        /**
+         *
+         * The number of unused hosts in the network
+         * @readonly
+         * @type {number}
+         * @memberof IPv4Network
+         */
         get: function () {
             return this.subnets
                 .map(function (s) {
@@ -42,7 +77,28 @@ var IPv4Network = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(IPv4Network.prototype, "efficiency", {
+        /**
+         *
+         * The efficiency of the subnetting process
+         * @readonly
+         * @type {number}
+         * @memberof IPv4Network
+         */
+        get: function () {
+            return this.requiredSize / (this.unusedSize + this.requiredSize);
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(IPv4Network.prototype, "subnets", {
+        /**
+         *
+         * The resulting subnets of the network
+         * @readonly
+         * @type {Subnet[]}
+         * @memberof IPv4Network
+         */
         get: function () {
             return this._subnets;
         },

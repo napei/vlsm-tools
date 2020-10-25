@@ -1,20 +1,48 @@
 import {Address4} from 'ip-address';
-import {CidrSize, DoRequirementsFit, ReduceRequirementsCount} from './utils';
+import {CidrMaskSize, DoRequirementsFit, RequirementsHostsCount} from './utils';
 
+/**
+ * Interface representing the requirements for a subnet.
+ * Label and size
+ *
+ * @export
+ * @interface SubnetRequirements
+ */
 export interface SubnetRequirements {
   label: string;
   size: number;
 }
 
+/**
+ * Interface representing a subnet, with its intended requirements
+ * and its ipv4 address
+ *
+ * @export
+ * @interface Subnet
+ */
 export interface Subnet {
   address: Address4;
   requirements: SubnetRequirements;
 }
 
+/**
+ * Class representing an IPv4 Network that will contain
+ * several subnets
+ *
+ * @export
+ * @class IPv4Network
+ */
 export class IPv4Network {
   private _subnets: Subnet[];
   private _requirements: SubnetRequirements[];
   private _majorNetwork: Address4;
+
+  /**
+   * Creates an instance of IPv4Network.
+   * @param {SubnetRequirements[]} requirements Array of requirements for the desired subnets
+   * @param {Address4} majorNetwork Major network that will be subnetted
+   * @memberof IPv4Network
+   */
   constructor(requirements: SubnetRequirements[], majorNetwork: Address4) {
     this._subnets = [];
     this._requirements = requirements;
@@ -27,14 +55,36 @@ export class IPv4Network {
     this.calculate();
   }
 
+  /**
+   *
+   * The required size of the network based on the requirements
+   * @readonly
+   * @type {number}
+   * @memberof IPv4Network
+   */
   public get requiredSize(): number {
-    return ReduceRequirementsCount(this._requirements);
+    return RequirementsHostsCount(this._requirements);
   }
 
+  /**
+   *
+   * The number of usable hosts in the major network
+   * Excludes the network and broadcast addresses
+   * @readonly
+   * @type {number}
+   * @memberof IPv4Network
+   */
   public get networkSize(): number {
-    return CidrSize(this._majorNetwork.subnetMask);
+    return CidrMaskSize(this._majorNetwork.subnetMask);
   }
 
+  /**
+   *
+   * The number of unused hosts in the network
+   * @readonly
+   * @type {number}
+   * @memberof IPv4Network
+   */
   public get unusedSize(): number {
     return this.subnets
       .map(s => {
@@ -46,6 +96,24 @@ export class IPv4Network {
       });
   }
 
+  /**
+   *
+   * The efficiency of the subnetting process
+   * @readonly
+   * @type {number}
+   * @memberof IPv4Network
+   */
+  public get efficiency(): number {
+    return this.requiredSize / (this.unusedSize + this.requiredSize);
+  }
+
+  /**
+   *
+   * The resulting subnets of the network
+   * @readonly
+   * @type {Subnet[]}
+   * @memberof IPv4Network
+   */
   public get subnets(): Subnet[] {
     return this._subnets;
   }
