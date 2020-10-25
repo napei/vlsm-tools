@@ -73,7 +73,7 @@ export class Subnet {
    * @memberof Subnet
    */
   public get unusedSize(): number {
-    return this.requirements.size - this.networkSize;
+    return this.networkSize - this.requirements.size;
   }
 
   /**
