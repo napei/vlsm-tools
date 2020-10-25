@@ -1,3 +1,7 @@
+# 0.5.3: October 25th, 2020
+
+- Fix `@types/jsbin` in wrong dependency type
+
 # 0.5.2: October 25th, 2020
 
 - Add readme and changelog
