@@ -1,3 +1,7 @@
+# v0.5.5: October 25th, 2020
+
+- fix: wrong unused size calculation
+
 # v0.5.4: October 25th, 2020
 
 - Update `Subnet` to be a class for better calculation of sizes
