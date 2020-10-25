@@ -1,3 +1,7 @@
+# v0.5.6: October 26th, 2020
+
+- fix: update tsconfig for tree shaking (esnext) modules
+
 # v0.5.5: October 25th, 2020
 
 - fix: wrong unused size calculation
