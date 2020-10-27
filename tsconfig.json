@@ -10,11 +10,6 @@
     "strict": true,
     "lib": ["es2018", "dom"]
   },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "src/majorNetwork.ts",
-    "src/network.ts"
-  ],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "build"]
 }

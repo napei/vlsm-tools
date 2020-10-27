@@ -153,6 +153,17 @@ export class IPv4Network {
   }
 
   /**
+   * The major network for this network
+   *
+   * @readonly
+   * @type {Address4}
+   * @memberof IPv4Network
+   */
+  public get majorNetwork(): Address4 {
+    return this._majorNetwork;
+  }
+
+  /**
    *
    * The required size of the network based on the requirements
    * @readonly
@@ -215,6 +226,32 @@ export class IPv4Network {
     return this._subnets;
   }
 
+  private next_net_add(address: Address4): string {
+    if (!address.addressMinusSuffix) return '';
+
+    const a = address.addressMinusSuffix.split('.').map(s => parseInt(s));
+    if (a[3] < 255) {
+      a[3]++;
+    } else {
+      if (a[2] < 255) {
+        a[3] = 0;
+        a[2]++;
+      } else {
+        if (a[1] < 255) {
+          a[3] = 0;
+          a[2] = 0;
+          a[1]++;
+        } else {
+          a[3] = 0;
+          a[2] = 0;
+          a[1] = 0;
+          a[0]++;
+        }
+      }
+    }
+    return a.join('.');
+  }
+
   private calculate(): void {
     // Start of the next available network space for subnetting
     // Begin with the current subnet size
@@ -245,35 +282,35 @@ export class IPv4Network {
         `${subnettingNetworkStart.addressMinusSuffix}/${suffix}`
       );
       this._subnets.push(new Subnet(subnet, r));
+      const lastAddress: Address4 = subnet.endAddress();
+      const nextAddress = this.next_net_add(lastAddress);
+      subnettingNetworkStart = new Address4(`${nextAddress}/${suffix}`);
+      // if (subnet.addressMinusSuffix) {
+      //   const currentNetworkAddress = subnet.addressMinusSuffix
+      //     ?.split('.')
+      //     .map(s => parseInt(s));
+      //   let i = 0;
+      //   if (suffix > 0 && suffix <= 8) {
+      //     i = 0;
+      //   }
 
-      if (subnet.addressMinusSuffix) {
-        const currentNetworkAddress = subnet.addressMinusSuffix?.split('.');
-        let i = 0;
-        if (suffix > 0 && suffix <= 8) {
-          i = 0;
-        }
+      //   if (suffix > 8 && suffix <= 16) {
+      //     i = 1;
+      //   }
 
-        if (suffix > 8 && suffix <= 16) {
-          i = 1;
-        }
+      //   if (suffix > 16 && suffix <= 24) {
+      //     i = 2;
+      //   }
 
-        if (suffix > 16 && suffix <= 24) {
-          i = 2;
-        }
+      //   if (suffix > 24) {
+      //     i = 3;
+      //   }
 
-        if (suffix > 24) {
-          i = 3;
-        }
+      //   currentNetworkAddress[i] = currentNetworkAddress[i] + multiple;
 
-        currentNetworkAddress[i] = (
-          parseInt(currentNetworkAddress[i]) + multiple
-        ).toString();
-        subnettingNetworkStart = new Address4(
-          `${currentNetworkAddress.join('.')}/${suffix}`
-        );
-      } else {
-        throw 'error';
-      }
+      // } else {
+      //   throw 'error';
+      // }
     });
   }
 }
