@@ -262,7 +262,6 @@ export class IPv4Network {
     this._requirements.forEach((r: SubnetRequirements) => {
       let power = 0;
       let suffix = 32;
-      let multiple = 1;
       let loop = true;
       while (loop) {
         const allocatedSize = Math.pow(2, power);
@@ -272,11 +271,6 @@ export class IPv4Network {
         }
         power++;
         suffix--;
-
-        multiple = multiple * 2;
-        if (multiple > 128) {
-          multiple = 1;
-        }
       }
       const subnet = new Address4(
         `${subnettingNetworkStart.addressMinusSuffix}/${suffix}`
@@ -285,32 +279,6 @@ export class IPv4Network {
       const lastAddress: Address4 = subnet.endAddress();
       const nextAddress = this.next_net_add(lastAddress);
       subnettingNetworkStart = new Address4(`${nextAddress}/${suffix}`);
-      // if (subnet.addressMinusSuffix) {
-      //   const currentNetworkAddress = subnet.addressMinusSuffix
-      //     ?.split('.')
-      //     .map(s => parseInt(s));
-      //   let i = 0;
-      //   if (suffix > 0 && suffix <= 8) {
-      //     i = 0;
-      //   }
-
-      //   if (suffix > 8 && suffix <= 16) {
-      //     i = 1;
-      //   }
-
-      //   if (suffix > 16 && suffix <= 24) {
-      //     i = 2;
-      //   }
-
-      //   if (suffix > 24) {
-      //     i = 3;
-      //   }
-
-      //   currentNetworkAddress[i] = currentNetworkAddress[i] + multiple;
-
-      // } else {
-      //   throw 'error';
-      // }
     });
   }
 }
