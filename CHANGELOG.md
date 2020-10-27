@@ -1,3 +1,9 @@
+# v0.5.7: October 27th, 2020
+
+- Fix major bug causing incorrect subnetting
+- Add test cases
+-
+
 # v0.5.6: October 26th, 2020
 
 - fix: update tsconfig for tree shaking (esnext) modules
