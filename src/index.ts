@@ -5,4 +5,5 @@ export {
   CidrMaskSize,
   DoRequirementsFit,
   RequirementsHostsCount,
+  ParseIPv4Address,
 } from './utils';
