@@ -78,3 +78,15 @@ export function RequirementsHostsCount(r: SubnetRequirements[]): number {
     return a + b.size;
   }, 0);
 }
+
+/**
+ * Parses an IP address, using the same library as the
+ * rest of this package
+ *
+ * @export
+ * @param {string} i input string to parse
+ * @returns {boolean} is valid or not
+ */
+export function ParseIPv4Address(i: string): boolean {
+  return new Address4(i).isCorrect();
+}
