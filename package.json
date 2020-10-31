@@ -1,6 +1,6 @@
 {
   "name": "vlsm-tools",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "description": "",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
