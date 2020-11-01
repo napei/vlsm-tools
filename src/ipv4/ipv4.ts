@@ -5,7 +5,7 @@ import {
   DoRequirementsFit,
   DottedDecimalToWildcard,
   RequirementsHostsCount,
-} from './utils';
+} from '../utils';
 
 /**
  * Interface representing the requirements for a subnet.
