@@ -1,5 +1,5 @@
 import {Address4} from 'ip-address';
-import {SubnetRequirements} from './ipv4/ipv4';
+import {IPv4SubnetRequirements} from './ipv4/ipv4';
 
 /**
  * Converts a CIDR mask (/xx) to dotted decimal
@@ -36,44 +36,43 @@ export function DottedDecimalToWildcard(mask: string): string {
 
 /**
  * Calculates the size of a CIDR subnet mask
- * Excludes the network and broadcast address
  *
  * @export
  * @param {number} mask CIDR Mask
  * @returns {number} Size
  */
 export function CidrMaskSize(mask: number): number {
-  // subtract 2 as host requirements do not
-  // include network and broadcast address
-  return Math.pow(2, 32 - mask) - 2;
+  return Math.pow(2, 32 - mask);
 }
 
 /**
  * Check if a list of requirements will fit inside a major network
  *
  * @export
- * @param {SubnetRequirements[]} requirements List of requirements
+ * @param {IPv4SubnetRequirements[]} requirements List of requirements
  * @param {Address4} majorNetwork Major network
  * @returns {boolean} Does it fit?
  */
-export function DoRequirementsFit(
-  requirements: SubnetRequirements[],
+export function DoIPv4RequirementsFit(
+  requirements: IPv4SubnetRequirements[],
   majorNetwork: Address4
 ): boolean {
   const majSize = CidrMaskSize(majorNetwork.subnetMask);
-  const reqSize = RequirementsHostsCount(requirements);
+  const reqSize = IPv4RequirementsHostsCount(requirements);
 
   return reqSize < majSize;
 }
 
 /**
- * Get the total number of hosts from a list of requirements
+ * Get the total number of hosts from a list of IPv4 requirements
  *
  * @export
- * @param {SubnetRequirements[]} r List of requirements
+ * @param {IPv4SubnetRequirements[]} r List of requirements
  * @returns {number} Number of hosts required
  */
-export function RequirementsHostsCount(r: SubnetRequirements[]): number {
+export function IPv4RequirementsHostsCount(
+  r: IPv4SubnetRequirements[]
+): number {
   return r.reduce((a, b) => {
     return a + b.size;
   }, 0);
