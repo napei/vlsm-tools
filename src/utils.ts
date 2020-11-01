@@ -1,5 +1,5 @@
 import {Address4} from 'ip-address';
-import {SubnetRequirements} from './majorNetwork';
+import {SubnetRequirements} from './ipv4';
 
 /**
  * Converts a CIDR mask (/xx) to dotted decimal

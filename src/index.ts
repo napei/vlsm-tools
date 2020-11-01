@@ -1,4 +1,4 @@
-export {IPv4Network, Subnet, SubnetRequirements} from './majorNetwork';
+export {IPv4Network, Subnet, SubnetRequirements} from './ipv4';
 export {
   CidrMaskToDottedDecimal,
   DottedDecimalToWildcard,
