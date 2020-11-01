@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "outDir": "./build/esm",
     "declaration": true,
-    "target": "ESNext",
+    "target": "ES2015",
     "moduleResolution": "node",
     "module": "ESNext",
     "strict": true,
