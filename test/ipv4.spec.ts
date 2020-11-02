@@ -1,6 +1,6 @@
 import {IPv4Network} from '../src';
 
-describe('Subnetting Cases', () => {
+describe('IPv4 Subnetting Cases', () => {
   it('should subnet 10.0.0.0/8 correctly', () => {
     const network = new IPv4Network(
       [

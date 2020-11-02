@@ -2,10 +2,10 @@ import {Address4} from 'ip-address';
 import {
   CidrMaskSize,
   CidrMaskToDottedDecimal,
-  DoRequirementsFit,
+  DoIPv4RequirementsFit,
   DottedDecimalToWildcard,
-  RequirementsHostsCount,
-} from './utils';
+  IPv4RequirementsHostsCount,
+} from '../utils';
 
 /**
  * Interface representing the requirements for a subnet.
@@ -14,7 +14,7 @@ import {
  * @export
  * @interface SubnetRequirements
  */
-export interface SubnetRequirements {
+export interface IPv4SubnetRequirements {
   label: string;
   size: number;
 }
@@ -26,7 +26,7 @@ export interface SubnetRequirements {
  * @export
  * @class Subnet
  */
-export class Subnet {
+export class IPv4Subnet {
   /**
    * Address representing this subnet
    *
@@ -38,18 +38,18 @@ export class Subnet {
   /**
    * Requirements of the subnet
    *
-   * @type {SubnetRequirements}
+   * @type {IPv4SubnetRequirements}
    * @memberof Subnet
    */
-  public readonly requirements: SubnetRequirements;
+  public readonly requirements: IPv4SubnetRequirements;
 
   /**
    *Creates an instance of Subnet.
    * @param {Address4} a Address
-   * @param {SubnetRequirements} r Requirements
+   * @param {IPv4SubnetRequirements} r Requirements
    * @memberof Subnet
    */
-  constructor(a: Address4, r: SubnetRequirements) {
+  constructor(a: Address4, r: IPv4SubnetRequirements) {
     this.address = a;
     this.requirements = r;
   }
@@ -62,7 +62,7 @@ export class Subnet {
    * @memberof Subnet
    */
   public get networkSize(): number {
-    return CidrMaskSize(this.address.subnetMask);
+    return CidrMaskSize(this.address.subnetMask) - 2;
   }
 
   /**
@@ -118,17 +118,17 @@ export class Subnet {
  * @class IPv4Network
  */
 export class IPv4Network {
-  private _subnets: Subnet[];
-  private _requirements: SubnetRequirements[];
+  private _subnets: IPv4Subnet[];
+  private _requirements: IPv4SubnetRequirements[];
   private _majorNetwork: Address4;
 
   /**
    * Creates an instance of IPv4Network.
-   * @param {SubnetRequirements[]} requirements Array of requirements for the desired subnets
+   * @param {IPv4SubnetRequirements[]} requirements Array of requirements for the desired subnets
    * @param {string} majorNetwork Major network that will be subnetted in slash notation x.x.x.x/xx
    * @memberof IPv4Network
    */
-  constructor(requirements: SubnetRequirements[], majorNetwork: string) {
+  constructor(requirements: IPv4SubnetRequirements[], majorNetwork: string) {
     this._subnets = [];
     this._requirements = requirements;
     if (majorNetwork.indexOf('/') === -1) {
@@ -144,7 +144,7 @@ export class IPv4Network {
       throw `"${majorNetwork}" is incorrect`;
     }
 
-    const reqFit = DoRequirementsFit(requirements, this._majorNetwork);
+    const reqFit = DoIPv4RequirementsFit(requirements, this._majorNetwork);
     if (!reqFit) {
       throw `Unable to fit requirements into a ${this._majorNetwork.subnet} network`;
     }
@@ -171,7 +171,7 @@ export class IPv4Network {
    * @memberof IPv4Network
    */
   public get requiredSize(): number {
-    return RequirementsHostsCount(this._requirements);
+    return IPv4RequirementsHostsCount(this._requirements);
   }
 
   /**
@@ -183,7 +183,7 @@ export class IPv4Network {
    * @memberof IPv4Network
    */
   public get networkSize(): number {
-    return CidrMaskSize(this._majorNetwork.subnetMask);
+    return CidrMaskSize(this._majorNetwork.subnetMask) - 2;
   }
 
   /**
@@ -219,10 +219,10 @@ export class IPv4Network {
    *
    * The resulting subnets of the network
    * @readonly
-   * @type {Subnet[]}
+   * @type {IPv4Subnet[]}
    * @memberof IPv4Network
    */
-  public get subnets(): Subnet[] {
+  public get subnets(): IPv4Subnet[] {
     return this._subnets;
   }
 
@@ -259,7 +259,7 @@ export class IPv4Network {
     // Sort requirements largest first
     this._requirements = this._requirements.sort((a, b) => b.size - a.size);
 
-    this._requirements.forEach((r: SubnetRequirements) => {
+    this._requirements.forEach((r: IPv4SubnetRequirements) => {
       let power = 0;
       let suffix = 32;
       let loop = true;
@@ -275,7 +275,7 @@ export class IPv4Network {
       const subnet = new Address4(
         `${subnettingNetworkStart.addressMinusSuffix}/${suffix}`
       );
-      this._subnets.push(new Subnet(subnet, r));
+      this._subnets.push(new IPv4Subnet(subnet, r));
       const lastAddress: Address4 = subnet.endAddress();
       const nextAddress = this.next_net_add(lastAddress);
       subnettingNetworkStart = new Address4(`${nextAddress}/${suffix}`);

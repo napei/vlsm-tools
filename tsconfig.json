@@ -2,14 +2,15 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "build",
+    "outDir": "build/esm",
     "declaration": true,
-    "target": "es5",
+    "target": "ES2015",
     "moduleResolution": "node",
-    "module": "esnext",
-    "strict": true,
-    "lib": ["es2018", "dom"]
+    "module": "ESNext",
+    "lib": ["es2018", "dom"],
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "include": ["src/**/*.ts"],
+  // , "test/**/*.ts"
   "exclude": ["node_modules", "build"]
 }

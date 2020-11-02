@@ -1,9 +1,10 @@
-export {IPv4Network, Subnet, SubnetRequirements} from './majorNetwork';
+export {IPv4SubnetRequirements, IPv4Network, IPv4Subnet} from './ipv4/ipv4';
+export {IPv6Network, IPv6Subnet} from './ipv6/ipv6';
 export {
-  CidrMaskToDottedDecimal,
-  DottedDecimalToWildcard,
   CidrMaskSize,
-  DoRequirementsFit,
-  RequirementsHostsCount,
+  CidrMaskToDottedDecimal,
+  DoIPv4RequirementsFit,
+  DottedDecimalToWildcard,
   ParseIPv4Address,
+  IPv4RequirementsHostsCount,
 } from './utils';
