@@ -5,7 +5,7 @@
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
   "files": [
-    "build/src"
+    "build/**/*"
   ],
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "test": "jest --config jest-config.json",
+    "test": "jest --config jest.config.js",
     "lint": "gts lint",
     "clean": "rimraf ./build",
     "build:esm": "tsc -p tsconfig.json",
