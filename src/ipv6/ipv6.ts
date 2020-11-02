@@ -83,7 +83,6 @@ export class IPv6Network {
     outputAddresses[0] = bigIntToAddress(startingAddress, newSlash);
 
     for (let i = 1; i < subnetCount; i++) {
-      console.log(this._majorNetwork.subnetMask);
       const newAddress = startingAddress.add(newSlashSize);
       outputAddresses[i] = bigIntToAddress(newAddress, newSlash);
       startingAddress = newAddress;
