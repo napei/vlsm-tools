@@ -1,4 +1,6 @@
+import {assert} from 'console';
 import {Address4} from 'ip-address';
+import {BigInteger} from 'jsbn';
 import {IPv4SubnetRequirements} from './ipv4/ipv4';
 
 /**
@@ -10,7 +12,9 @@ import {IPv4SubnetRequirements} from './ipv4/ipv4';
  * @returns {string} Dotted Decimal Subnet Mask
  */
 export function CidrMaskToDottedDecimal(mask: number): string {
-  const bitMask = 0xffffffff << (32 - mask);
+  assert(mask > -1 && mask < 33);
+  const m = new BigInteger('0xffffffff', 16).shiftLeft(32 - mask);
+  const bitMask = parseInt(`0x${m.toString(16)}`);
   const maskStr = [
     bitMask >>> 24,
     (bitMask >> 16) & 0xff,
