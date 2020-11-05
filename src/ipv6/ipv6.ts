@@ -1,11 +1,22 @@
+import {assert} from 'console';
 import {Address6} from 'ip-address';
 import {BigInteger} from 'jsbn';
+import {
+  bigIntToAddress,
+  getSubnetBitmaskFromSlash,
+  IPv6PrefixSize,
+  splitSlashSubnet,
+} from './ipv6-utils';
 
 export class IPv6Subnet {
   public readonly address: Address6;
 
   constructor(a: Address6) {
     this.address = a;
+  }
+
+  public get networkAddress(): string {
+    return this.address.addressMinusSuffix;
   }
 }
 
@@ -19,7 +30,7 @@ export class IPv6Subnet {
  * @class IPv6Network
  */
 export class IPv6Network {
-  private _majorNetwork: Address6;
+  public readonly majorNetwork: Address6;
 
   /**
    *Creates an instance of IPv6Network.
@@ -32,96 +43,66 @@ export class IPv6Network {
       throw 'Address must be in CIDR slash notation';
     }
     try {
-      this._majorNetwork = new Address6(majorNetwork);
+      this.majorNetwork = new Address6(majorNetwork);
     } catch (e) {
       throw `Unable to parse "${majorNetwork} to an address"`;
     }
 
-    if (!this._majorNetwork.isCorrect) {
+    if (!this.majorNetwork.isCorrect) {
       throw `"${majorNetwork} is incorrect"`;
     }
   }
 
-  private splitSlashSubnet(
-    originalSlash: number,
-    numberOfSubnets: number
-  ): number {
-    let power = 0;
-    for (let i = 0; i < 128 - originalSlash; i++) {
-      power = Math.pow(2, i);
-      if (power >= numberOfSubnets) {
-        return originalSlash + i;
-      }
-    }
-    return -1;
-  }
-
-  public subdivide(subnetCount: number): Address6[] {
-    const slash = this._majorNetwork.subnetMask;
-    const newSlash = this.splitSlashSubnet(slash, subnetCount);
-    if (newSlash === -1) {
-      throw "Doesn't fit";
+  public subdivideIntoPrefixes(desiredPrefix: number): Address6[] {
+    assert(desiredPrefix >= 0 && desiredPrefix <= 128);
+    const networkPrefix = this.majorNetwork.subnetMask;
+    if (desiredPrefix < networkPrefix) {
+      throw `Unable to fit subnets of size /${desiredPrefix} into a network of size /${networkPrefix}`;
     }
 
-    const subnetMask = this.getSubnetMaskFromSlash(slash);
+    const subnetCount = Math.pow(2, desiredPrefix - networkPrefix);
 
-    const newSlashSize = new BigInteger('2').pow(128 - newSlash);
+    const networkBitmask = getSubnetBitmaskFromSlash(networkPrefix);
+    const desiredSize = IPv6PrefixSize(desiredPrefix);
+
     const outputAddresses: Address6[] = new Array<Address6>();
-
-    const addressString = this._majorNetwork.canonicalForm().replace(':', '');
-
-    let startingAddress = new BigInteger(addressString, 16).and(subnetMask);
-
-    const bigIntToAddress = (i: BigInteger, slash: number) => {
-      return new Address6(
-        `${i
-          .toString(16)
-          .match(/.{1,4}/g)
-          ?.join(':')}/${slash}`
-      );
-    };
-    outputAddresses[0] = bigIntToAddress(startingAddress, newSlash);
+    const addressString = this.majorNetwork.canonicalForm().replace(/:/g, '');
+    let startingAddress = new BigInteger(addressString, 16).and(networkBitmask);
+    outputAddresses[0] = bigIntToAddress(startingAddress, desiredPrefix);
 
     for (let i = 1; i < subnetCount; i++) {
-      const newAddress = startingAddress.add(newSlashSize);
-      outputAddresses[i] = bigIntToAddress(newAddress, newSlash);
+      const newAddress = startingAddress.add(desiredSize);
+      outputAddresses[i] = bigIntToAddress(newAddress, desiredPrefix);
       startingAddress = newAddress;
     }
 
     return outputAddresses;
   }
 
-  private getSubnetMaskFromSlash(slash: number): BigInteger {
-    // Build a binary mask string
-    // For example, 1111111111111111:1111111111111111:0 is /32
-    let maskstr = '';
-    for (let i = 0; i < slash; i++) {
-      maskstr += '1';
-      if ((i + 1) % 16 === 0) {
-        maskstr += ':';
-      }
+  public subdivideIntoSubnets(nSubnets: number): Address6[] {
+    const prefix = this.majorNetwork.subnetMask;
+    const newPrefix = splitSlashSubnet(prefix, nSubnets);
+    if (newPrefix === -1) {
+      throw "Doesn't fit";
     }
 
-    // Append zero to make complete mask
-    if (maskstr[maskstr.length - 1] === ':') {
-      maskstr += '0';
+    const prefixMask = getSubnetBitmaskFromSlash(prefix);
+
+    const newSlashSize = IPv6PrefixSize(newPrefix);
+    const outputAddresses: Address6[] = new Array<Address6>();
+
+    const addressString = this.majorNetwork.canonicalForm().replace(/:/g, '');
+
+    let startingAddress = new BigInteger(addressString, 16).and(prefixMask);
+
+    outputAddresses[0] = bigIntToAddress(startingAddress, newPrefix);
+
+    for (let i = 1; i < nSubnets; i++) {
+      const newAddress = startingAddress.add(newSlashSize);
+      outputAddresses[i] = bigIntToAddress(newAddress, newPrefix);
+      startingAddress = newAddress;
     }
 
-    // Convert binary mask into hex mask
-    // Append :: to be able to parse as ipv6 address
-    const mask =
-      maskstr
-        .split(':')
-        .map(p => {
-          return new BigInteger(p, 2).toString(16);
-        })
-        .join(':') + '::';
-
-    // Return a biginteger representing this number.
-    // TODO: There is probably a much faster way to do this that does not involve double construction but this is quick and dirty
-    return new BigInteger(
-      new Address6(mask).canonicalForm().replace(':', ''),
-      16
-    );
+    return outputAddresses;
   }
 }

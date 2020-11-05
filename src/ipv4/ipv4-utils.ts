@@ -1,7 +1,7 @@
 import {assert} from 'console';
 import {Address4} from 'ip-address';
 import {BigInteger} from 'jsbn';
-import {IPv4SubnetRequirements} from './ipv4/ipv4';
+import {IPv4SubnetRequirements} from './ipv4';
 
 /**
  * Converts a CIDR mask (/xx) to dotted decimal

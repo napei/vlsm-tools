@@ -5,7 +5,7 @@ import {
   DoIPv4RequirementsFit,
   DottedDecimalToWildcard,
   IPv4RequirementsHostsCount,
-} from '../utils';
+} from './ipv4-utils';
 
 /**
  * Interface representing the requirements for a subnet.
