@@ -8,12 +8,3 @@ export {
   ParseIPv4Address,
   IPv4RequirementsHostsCount,
 } from './ipv4/ipv4-utils';
-
-// const n = new IPv6Network('2001:db8::/4');
-// const divided = n.subdivideIntoPrefixes(11);
-// console.dir(
-//   divided.map(n => {
-//     return n.address;
-//   }),
-//   {maxArrayLength: null}
-// );
