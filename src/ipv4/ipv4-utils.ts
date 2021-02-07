@@ -15,12 +15,7 @@ export function CidrMaskToDottedDecimal(mask: number): string {
   assert(mask > -1 && mask < 33);
   const m = new BigInteger('0xffffffff', 16).shiftLeft(32 - mask);
   const bitMask = parseInt(`0x${m.toString(16)}`);
-  const maskStr = [
-    bitMask >>> 24,
-    (bitMask >> 16) & 0xff,
-    (bitMask >> 8) & 0xff,
-    bitMask & 0xff,
-  ].join('.');
+  const maskStr = [bitMask >>> 24, (bitMask >> 16) & 0xff, (bitMask >> 8) & 0xff, bitMask & 0xff].join('.');
   return maskStr;
 }
 
@@ -57,10 +52,7 @@ export function CidrMaskSize(mask: number): number {
  * @param {Address4} majorNetwork Major network
  * @returns {boolean} Does it fit?
  */
-export function DoIPv4RequirementsFit(
-  requirements: IPv4SubnetRequirements[],
-  majorNetwork: Address4
-): boolean {
+export function DoIPv4RequirementsFit(requirements: IPv4SubnetRequirements[], majorNetwork: Address4): boolean {
   const majSize = CidrMaskSize(majorNetwork.subnetMask);
   const reqSize = IPv4RequirementsHostsCount(requirements);
 
@@ -74,9 +66,7 @@ export function DoIPv4RequirementsFit(
  * @param {IPv4SubnetRequirements[]} r List of requirements
  * @returns {number} Number of hosts required
  */
-export function IPv4RequirementsHostsCount(
-  r: IPv4SubnetRequirements[]
-): number {
+export function IPv4RequirementsHostsCount(r: IPv4SubnetRequirements[]): number {
   return r.reduce((a, b) => {
     return a + b.size;
   }, 0);

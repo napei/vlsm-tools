@@ -1,12 +1,7 @@
 import {assert} from 'console';
 import {Address6} from 'ip-address';
 import {BigInteger} from 'jsbn';
-import {
-  bigIntToAddress,
-  getSubnetBitmaskFromSlash,
-  IPv6PrefixSize,
-  splitSlashSubnet,
-} from './ipv6-utils';
+import {bigIntToAddress, getSubnetBitmaskFromSlash, IPv6PrefixSize, splitSlashSubnet} from './ipv6-utils';
 
 export class IPv6Subnet {
   public readonly address: Address6;

@@ -29,10 +29,7 @@ export function getSubnetBitmaskFromSlash(slash: number): BigInteger {
   return new BigInteger(mask, 2);
 }
 
-export function splitSlashSubnet(
-  originalSlash: number,
-  numberOfSubnets: number
-): number {
+export function splitSlashSubnet(originalSlash: number, numberOfSubnets: number): number {
   let power = 0;
   for (let i = 0; i < 128 - originalSlash; i++) {
     power = Math.pow(2, i);

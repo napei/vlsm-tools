@@ -272,9 +272,7 @@ export class IPv4Network {
         power++;
         suffix--;
       }
-      const subnet = new Address4(
-        `${subnettingNetworkStart.addressMinusSuffix}/${suffix}`
-      );
+      const subnet = new Address4(`${subnettingNetworkStart.addressMinusSuffix}/${suffix}`);
       this._subnets.push(new IPv4Subnet(subnet, r));
       const lastAddress: Address4 = subnet.endAddress();
       const nextAddress = this.next_net_add(lastAddress);

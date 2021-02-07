@@ -1,8 +1,4 @@
-import {
-  CidrMaskToDottedDecimal,
-  DottedDecimalToWildcard,
-  IPv4Network,
-} from '../src';
+import {CidrMaskToDottedDecimal, DottedDecimalToWildcard, IPv4Network} from '../src';
 
 describe('CIDR Mask Conversion', () => {
   it('should correctly convert all CIDR numbers to subnet masks', () => {
@@ -103,12 +99,7 @@ describe('IPv4 Subnetting Cases', () => {
       '10.0.0.0/8'
     );
 
-    const expected = [
-      '10.0.0.0/21',
-      '10.0.8.0/25',
-      '10.0.8.128/25',
-      '10.0.9.0/25',
-    ];
+    const expected = ['10.0.0.0/21', '10.0.8.0/25', '10.0.8.128/25', '10.0.9.0/25'];
 
     expect(network.subnets).toBeInstanceOf(Array);
     network.subnets.forEach((s, i) => {

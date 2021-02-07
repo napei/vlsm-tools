@@ -19,12 +19,12 @@
     "clean": "rimraf ./build",
     "build:esm": "tsc -p tsconfig.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "compile": "npm run clean && npm run build:esm && npm run build:cjs",
+    "compile": "yarn clean && yarn build:esm && yarn build:cjs",
     "fix": "gts fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run lint",
-    "prepublish": "npm run compile",
+    "prepare": "yarn compile",
+    "pretest": "yarn compile",
+    "posttest": "yarn lint",
+    "prepublish": "yarn compile",
     "release": "release-it"
   },
   "devDependencies": {
