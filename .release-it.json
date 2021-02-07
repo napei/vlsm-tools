@@ -3,10 +3,10 @@
     "release": true
   },
   "git": {
-    "changelog": "yarn dlx auto-changelog --commit-limit false --stdout --unreleased --template changelog.format.hbs"
+    "changelog": "yarn auto-changelog --commit-limit false --stdout --unreleased --template changelog.format.hbs"
   },
   "hooks": {
     "before:init": ["yarn compile", "yarn lint", "yarn test"],
-    "after:bump": "yarn dlx auto-changelog -p"
+    "after:bump": "yarn auto-changelog -p"
   }
 }
