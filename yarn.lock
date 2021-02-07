@@ -978,17 +978,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8":
+"@types/node@npm:*, @types/node@npm:14.14.25, @types/node@npm:>= 8":
   version: 14.14.25
   resolution: "@types/node@npm:14.14.25"
   checksum: 64c42730f4169e49ec378870622ef06c5d820b31340e224cc1b45bf06c8b0cfa28daa587b4ae2b8ea1f712ef049bae4d9c92925b157ba9ba7cde3b22ff552513
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:14.14.12":
-  version: 14.14.12
-  resolution: "@types/node@npm:14.14.12"
-  checksum: def4a93f6ba9ea5ccbed7b403988b5e888dcde27c9d00f3f487500a26a36e13826e294fabc6d01ce563059d3567f27ea8c458edc39b502e38659c5154667602b
   languageName: node
   linkType: hard
 
@@ -7415,7 +7408,7 @@ typescript@4.1.2:
   dependencies:
     "@types/jest": 26.0.19
     "@types/jsbn": 1.2.29
-    "@types/node": 14.14.12
+    "@types/node": 14.14.25
     auto-changelog: 2.2.1
     gts: 3.0.3
     ip-address: ^7.1.0
