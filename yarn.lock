@@ -2487,16 +2487,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^6.12.0":
-  version: 6.15.0
-  resolution: "eslint-config-prettier@npm:6.15.0"
-  dependencies:
-    get-stdin: ^6.0.0
+"eslint-config-prettier@npm:^7.0.0":
+  version: 7.2.0
+  resolution: "eslint-config-prettier@npm:7.2.0"
   peerDependencies:
-    eslint: ">=3.14.1"
+    eslint: ">=7.0.0"
   bin:
-    eslint-config-prettier-check: bin/cli.js
-  checksum: a790bc61699e43a2edc5453488576cd977fad3b3cf99c129c10760ce6970d422923fddf80b65b2b10a93c00af0180a854e4b7824cc268e5957826cbe5b969e90
+    eslint-config-prettier: bin/cli.js
+  checksum: 6812150ea49703cd64035527205b4905bc1edcd34646e71f71665e1acff9ab4648f872598389bdb209964093ad73993830a2c821ba12642764a5293513b92a58
   languageName: node
   linkType: hard
 
@@ -3117,13 +3115,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"get-stdin@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "get-stdin@npm:6.0.0"
-  checksum: b51d664838aef7f8353dc57371ce59cea54d8d584fec015a9d89d24561e95b97806d5b5ba120bc81574c9ed63cb3e210176ffa0ff9263c7e7ba4d56d0fe54913
-  languageName: node
-  linkType: hard
-
 "get-stream@npm:^4.0.0, get-stream@npm:^4.1.0":
   version: 4.1.0
   resolution: "get-stream@npm:4.1.0"
@@ -3321,20 +3312,21 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"gts@npm:3.0.3":
-  version: 3.0.3
-  resolution: "gts@npm:3.0.3"
+"gts@npm:3.1.0":
+  version: 3.1.0
+  resolution: "gts@npm:3.1.0"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^4.2.0
     "@typescript-eslint/parser": ^4.2.0
     chalk: ^4.1.0
     eslint: ^7.10.0
-    eslint-config-prettier: ^6.12.0
+    eslint-config-prettier: ^7.0.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^3.1.4
     execa: ^5.0.0
     inquirer: ^7.3.3
-    meow: ^8.0.0
+    json5: ^2.1.3
+    meow: ^9.0.0
     ncp: ^2.0.0
     prettier: ^2.1.2
     rimraf: ^3.0.2
@@ -3344,7 +3336,7 @@ fsevents@^2.1.2:
     typescript: ">=3"
   bin:
     gts: build/src/cli.js
-  checksum: f8caebf71b77905ac8f8ab3736b3e2e9dad9018a462110260038e30df95c922a70dc0ac5703769cba790f7a6277848a94ffa3ce32cd1fe648f3ef132c8cbb54d
+  checksum: b8cb573f1c1679900717c15ed6e31c0e7973f01d076b07745e8bc3563ce918b6eafb4401fc79378dcf3d10bec5dffaf620bdd2031d9efa4bf0da77d8501d6268
   languageName: node
   linkType: hard
 
@@ -4689,7 +4681,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"json5@npm:2.x, json5@npm:^2.1.2":
+"json5@npm:2.x, json5@npm:^2.1.2, json5@npm:^2.1.3":
   version: 2.2.0
   resolution: "json5@npm:2.2.0"
   dependencies:
@@ -4952,12 +4944,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"meow@npm:^8.0.0":
-  version: 8.1.2
-  resolution: "meow@npm:8.1.2"
+"meow@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "meow@npm:9.0.0"
   dependencies:
     "@types/minimist": ^1.2.0
     camelcase-keys: ^6.2.2
+    decamelize: ^1.2.0
     decamelize-keys: ^1.1.0
     hard-rejection: ^2.1.0
     minimist-options: 4.1.0
@@ -4967,7 +4960,7 @@ fsevents@^2.1.2:
     trim-newlines: ^3.0.0
     type-fest: ^0.18.0
     yargs-parser: ^20.2.3
-  checksum: 7246c3e824298dc1ceddc4b9930bf6a04df8f240d09e76ee180c4f9168df3d6a7d27593a5a3ef7005efbc1557780981e169a7acac56120c7bf2f99f5f54563aa
+  checksum: d1573809d6e3df55ab7b8c49f2ecfb8006664856700b556c794013ef887e47991bf1fef8ba9de60bb4afda9b62136823e4008c7f2cc459a7c036b7b649a42c0d
   languageName: node
   linkType: hard
 
@@ -7417,7 +7410,7 @@ typescript@4.1.2:
     "@types/jsbn": 1.2.29
     "@types/node": 14.14.12
     auto-changelog: 2.2.1
-    gts: 3.0.3
+    gts: 3.1.0
     ip-address: ^7.1.0
     jest: 26.6.3
     jsbn: ^1.1.0
