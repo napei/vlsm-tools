@@ -2,16 +2,77 @@ import {IPv6Network} from '../src';
 
 describe('IPv6 Subnetting', () => {
   it('should subdivide ipv6 network by 2', () => {
-    const net = new IPv6Network('2001:0db8:85a3::8a2e:0370:7334/32').subdivideIntoSubnets(2);
+    const net = new IPv6Network('2001:0db8:85a3::8a2e:0370:7334/32').subdivideIntoNumSubnets(2);
+
     const result = net.map(aa => {
       return aa.address;
     });
+
     const expected = ['2001:0db8:0000:0000:0000:0000:0000:0000/33', '2001:0db8:8000:0000:0000:0000:0000:0000/33'];
+
     expect(result).toBeInstanceOf(Array);
     expect(result).toHaveLength(expected.length);
+
     result.forEach((s, i) => {
       expect(s).toEqual(expected[i]);
     });
+  });
+
+  it('should calculate subnet allowance correctly', () => {
+    const network = new IPv6Network('2001:db8::/4');
+
+    const expected = [
+      [64, 1152921504606847000],
+      [10, 64],
+      [127, 10633823966279326983230456482242756608],
+    ];
+
+    expect(network).toBeDefined();
+    expected.forEach(e => {
+      expect(network.subnetPrefixAllowance(e[0])).toEqual(e[1]);
+    });
+  });
+
+  it('should only return the first 1000 subnets by default', () => {
+    const result = new IPv6Network('2001:db8::/4').subdivideIntoPrefixes(64);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(1000);
+  });
+
+  it('should return all subnets when `showAll` is set to true', () => {
+    const result = new IPv6Network('2001:db8::/4').subdivideIntoPrefixes(20, true);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(65536);
+  });
+
+  it('should return n subnets when `limit` is set to n', () => {
+    const result = new IPv6Network('2001:db8::/4').subdivideIntoPrefixes(64, false, 67);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(67);
+  });
+
+  it('should limit results when subdividing by number', () => {
+    const result = new IPv6Network('2001:0db8:85a3::8a2e:0370:7334/32').subdivideIntoNumSubnets(10000);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(1000);
+  });
+
+  it('should respect a custom limit when subdiving by number', () => {
+    const result = new IPv6Network('2001:0db8:85a3::8a2e:0370:7334/32').subdivideIntoNumSubnets(10000, false, 1234);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(1234);
+  });
+
+  it('should return all subnets when subdiving by number without limits', () => {
+    const result = new IPv6Network('2001:0db8:85a3::8a2e:0370:7334/32').subdivideIntoNumSubnets(2000, true);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(2000);
   });
 
   it('should sibdivide by prefix correctly', () => {
