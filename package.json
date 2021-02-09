@@ -1,6 +1,6 @@
 {
   "name": "vlsm-tools",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "",
   "main": "build/cjs/src/index.js",
   "module": "build/esm/src/index.js",
