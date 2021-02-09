@@ -37,10 +37,10 @@ export class IPv6Network {
   /**
    * Major network to perform subnetting against
    *
-   * @type {Address6}
+   * @type {IPv6Address}
    * @memberof IPv6Network
    */
-  public readonly majorNetwork: Address6;
+  public readonly majorNetwork: IPv6Address;
 
   /**
    * Creates an instance of IPv6Network.
@@ -50,16 +50,16 @@ export class IPv6Network {
    */
   constructor(majorNetwork: string) {
     if (majorNetwork.indexOf('/') === -1) {
-      throw 'Address must be in CIDR slash notation';
+      throw new Error('Address must be in CIDR slash notation');
     }
     try {
-      this.majorNetwork = new Address6(majorNetwork);
+      this.majorNetwork = new IPv6Address(majorNetwork);
     } catch (e) {
-      throw `Unable to parse "${majorNetwork} to an address"`;
+      throw new Error(`Unable to parse "${majorNetwork} to an address"`);
     }
 
     if (!this.majorNetwork.isCorrect) {
-      throw `"${majorNetwork} is incorrect"`;
+      throw new Error(`"${majorNetwork} is incorrect"`);
     }
   }
 
@@ -139,7 +139,7 @@ export class IPv6Network {
     const prefix = this.majorNetwork.subnetMask;
     const newPrefix = splitSlashSubnet(prefix, n);
     if (newPrefix === -1) {
-      throw "Doesn't fit";
+      throw new Error("Doesn't fit");
     }
 
     const prefixMask = getSubnetBitmaskFromSlash(prefix);
