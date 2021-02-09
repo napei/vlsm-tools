@@ -2451,6 +2451,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild@npm:^0.8.43":
+  version: 0.8.43
+  resolution: "esbuild@npm:0.8.43"
+  bin:
+    esbuild: bin/esbuild
+  checksum: 67c5fa711eaf83f763101477b11eb9ab07f6c9a6081ad99ad81d3c8ea4d28ad13f78b533617fdbd0426eeea87fcf8f844adf4d1d21399f96f6e7dbccb029d27c
+  languageName: node
+  linkType: hard
+
 "escape-goat@npm:^2.0.0":
   version: 2.1.1
   resolution: "escape-goat@npm:2.1.1"
@@ -3679,7 +3688,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ip-address@npm:^7.1.0":
+"ip-address@npm:7.1.0":
   version: 7.1.0
   resolution: "ip-address@npm:7.1.0"
   dependencies:
@@ -4560,7 +4569,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"jsbn@npm:1.1.0, jsbn@npm:^1.1.0":
+"jsbn@npm:1.1.0":
   version: 1.1.0
   resolution: "jsbn@npm:1.1.0"
   checksum: 1400c412cdb40a703be30ec4faaaba99cdc63cb61caf8b8d5898d968d3ec50c2154fca5a7e4b950d1f55ee50668221001cf4054da5f49f73a05616361ff0a1c1
@@ -7374,10 +7383,11 @@ typescript@4.1.3:
     "@types/jsbn": 1.2.29
     "@types/node": 14.14.25
     auto-changelog: 2.2.1
+    esbuild: ^0.8.43
     gts: 3.1.0
-    ip-address: ^7.1.0
+    ip-address: 7.1.0
     jest: 26.6.3
-    jsbn: ^1.1.0
+    jsbn: 1.1.0
     release-it: 14.3.0
     rimraf: 3.0.2
     ts-jest: 26.5.0
