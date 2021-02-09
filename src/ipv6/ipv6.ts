@@ -1,4 +1,3 @@
-import {assert} from 'console';
 import {Address6} from 'ip-address';
 import {BigInteger} from 'jsbn';
 import {bigIntToAddress, getSubnetBitmaskFromSlash, IPv6PrefixSize, splitSlashSubnet} from './ipv6-utils';
@@ -49,7 +48,9 @@ export class IPv6Network {
   }
 
   public subdivideIntoPrefixes(desiredPrefix: number): Address6[] {
-    assert(desiredPrefix >= 0 && desiredPrefix <= 128);
+    if (desiredPrefix >= 0 && desiredPrefix <= 128) {
+      throw new Error('provided prefix is not inside allowable range of 0-128');
+    }
     const networkPrefix = this.majorNetwork.subnetMask;
     if (desiredPrefix < networkPrefix) {
       throw `Unable to fit subnets of size /${desiredPrefix} into a network of size /${networkPrefix}`;
