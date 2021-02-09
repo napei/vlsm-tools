@@ -11,7 +11,7 @@ import {IPv4SubnetRequirements} from './ipv4';
  * @returns {string} Dotted Decimal Subnet Mask
  */
 export function CidrMaskToDottedDecimal(mask: number): string {
-  if (mask > -1 && mask < 33) {
+  if (!(mask > -1 && mask < 33)) {
     throw new Error('provided mask is not inside the CIDR range of 0 - 32');
   }
 

@@ -48,12 +48,12 @@ export class IPv6Network {
   }
 
   public subdivideIntoPrefixes(desiredPrefix: number): Address6[] {
-    if (desiredPrefix >= 0 && desiredPrefix <= 128) {
+    if (!(desiredPrefix >= 0 && desiredPrefix <= 128)) {
       throw new Error('provided prefix is not inside allowable range of 0-128');
     }
     const networkPrefix = this.majorNetwork.subnetMask;
     if (desiredPrefix < networkPrefix) {
-      throw `Unable to fit subnets of size /${desiredPrefix} into a network of size /${networkPrefix}`;
+      throw new Error(`Unable to fit subnets of size /${desiredPrefix} into a network of size /${networkPrefix}`);
     }
 
     const subnetCount = Math.pow(2, desiredPrefix - networkPrefix);
