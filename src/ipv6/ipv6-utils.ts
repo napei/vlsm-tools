@@ -1,5 +1,5 @@
-import {Address6} from 'ip-address';
 import {BigInteger} from 'jsbn';
+import {IPv6Address} from './ipv6';
 
 /**
  * Returns the number of addresses in an IPv6 Prefix
@@ -40,8 +40,8 @@ export function splitSlashSubnet(originalSlash: number, numberOfSubnets: number)
   return -1;
 }
 
-export function bigIntToAddress(i: BigInteger, slash: number): Address6 {
-  return new Address6(
+export function bigIntToAddress(i: BigInteger, slash: number): IPv6Address {
+  return new IPv6Address(
     `${i
       .toString(16)
       .match(/.{1,4}/g)

@@ -8,11 +8,9 @@ import {bigIntToAddress, getSubnetBitmaskFromSlash, IPv6PrefixSize, splitSlashSu
  * @export
  * @class IPv6Subnet
  */
-export class IPv6Subnet {
-  public readonly address: Address6;
-
-  constructor(a: Address6) {
-    this.address = a;
+export class IPv6Address extends Address6 {
+  constructor(address: string, optionalGroups?: number | undefined) {
+    super(address, optionalGroups);
   }
 
   /**
@@ -22,7 +20,7 @@ export class IPv6Subnet {
    * @memberof IPv6Subnet
    */
   public get size(): number {
-    return Math.pow(2, 128 - this.address.subnetMask);
+    return Math.pow(2, 128 - this.subnetMask);
   }
 }
 
@@ -74,10 +72,10 @@ export class IPv6Network {
    * @param {number} desiredPrefix Desired subdivision size in the form of a CIDR mask
    * @param {boolean} [showAll=false] When false, limit is applied
    * @param {number} [limit=1000] Maximum number of addresses returned
-   * @returns {IPv6Subnet[]} Array of subnets
+   * @returns {IPv6Address[]} Array of subnets
    * @memberof IPv6Network
    */
-  public subdivideIntoPrefixes(desiredPrefix: number, showAll = false, limit = 1000): IPv6Subnet[] {
+  public subdivideIntoPrefixes(desiredPrefix: number, showAll = false, limit = 1000): IPv6Address[] {
     if (!(desiredPrefix >= 0 && desiredPrefix <= 128)) {
       throw new Error('provided prefix is not inside allowable range of 0-128');
     }
@@ -90,17 +88,17 @@ export class IPv6Network {
     const networkBitmask = getSubnetBitmaskFromSlash(subnetMask);
     const desiredSize = IPv6PrefixSize(desiredPrefix);
 
-    const outputAddresses: IPv6Subnet[] = new Array<IPv6Subnet>();
+    const outputAddresses: IPv6Address[] = new Array<IPv6Address>();
     const addressString = this.majorNetwork.canonicalForm().replace(/:/g, '');
     let startingAddress = new BigInteger(addressString, 16).and(networkBitmask);
-    outputAddresses[0] = new IPv6Subnet(bigIntToAddress(startingAddress, desiredPrefix));
+    outputAddresses[0] = bigIntToAddress(startingAddress, desiredPrefix);
 
     for (let i = 1; i < subnetCount; i++) {
       if (!showAll && i > limit - 1) {
         break;
       }
       const newAddress = startingAddress.add(desiredSize);
-      outputAddresses[i] = new IPv6Subnet(bigIntToAddress(newAddress, desiredPrefix));
+      outputAddresses[i] = bigIntToAddress(newAddress, desiredPrefix);
       startingAddress = newAddress;
     }
 
@@ -134,10 +132,10 @@ export class IPv6Network {
    * @param {number} n Number of subnets to generate
    * @param {boolean} [showAll=false] When false, limit is applied
    * @param {number} [limit=1000] Maximum number of addresses returned
-   * @returns {IPv6Subnet[]} Array of subnets
+   * @returns {IPv6Address[]} Array of subnets
    * @memberof IPv6Network
    */
-  public subdivideIntoNumSubnets(n: number, showAll = false, limit = 1000): IPv6Subnet[] {
+  public subdivideIntoNumSubnets(n: number, showAll = false, limit = 1000): IPv6Address[] {
     const prefix = this.majorNetwork.subnetMask;
     const newPrefix = splitSlashSubnet(prefix, n);
     if (newPrefix === -1) {
@@ -147,20 +145,20 @@ export class IPv6Network {
     const prefixMask = getSubnetBitmaskFromSlash(prefix);
 
     const newSlashSize = IPv6PrefixSize(newPrefix);
-    const outputAddresses: IPv6Subnet[] = new Array<IPv6Subnet>();
+    const outputAddresses: IPv6Address[] = new Array<IPv6Address>();
 
     const addressString = this.majorNetwork.canonicalForm().replace(/:/g, '');
 
     let startingAddress = new BigInteger(addressString, 16).and(prefixMask);
 
-    outputAddresses[0] = new IPv6Subnet(bigIntToAddress(startingAddress, newPrefix));
+    outputAddresses[0] = bigIntToAddress(startingAddress, newPrefix);
 
     for (let i = 1; i < n; i++) {
       if (!showAll && i > limit - 1) {
         break;
       }
       const newAddress = startingAddress.add(newSlashSize);
-      outputAddresses[i] = new IPv6Subnet(bigIntToAddress(newAddress, newPrefix));
+      outputAddresses[i] = bigIntToAddress(newAddress, newPrefix);
       startingAddress = newAddress;
     }
 
