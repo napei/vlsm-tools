@@ -10,6 +10,10 @@
 
 **This package is in beta, there may be bugs and deprecations without warning.**
 
+### ⚠️ Warning
+
+IPv6 Calculation has the potential to generate **billions** of subnets if left unlimited. For subnetting calculations relating to IPv6, limits of 1000 subnets are in place by default and can be controlled and turned off. If you really want to do big numbers, then be prepared for things to get slow and memory intensive 😁
+
 ## Installation
 
 `npm i vlsm-tools`
