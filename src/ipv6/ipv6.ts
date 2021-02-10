@@ -22,6 +22,18 @@ export class IPv6Address extends Address6 {
   public get size(): number {
     return Math.pow(2, 128 - this.subnetMask);
   }
+
+  /**
+   * Returns the number of addresses in the subnet, using a BigInteger class to
+   * handle the extremely large numbers.
+   *
+   * @readonly
+   * @type {BigInteger}
+   * @memberof IPv6Address
+   */
+  public get sizeBigInteger(): BigInteger {
+    return new BigInteger('2').pow(128 - this.subnetMask);
+  }
 }
 
 /**
