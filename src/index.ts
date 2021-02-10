@@ -8,5 +8,5 @@ export {
   IPv4RequirementsHostsCount,
 } from './ipv4/ipv4-utils';
 
-export {IPv6Network, IPv6Address as IPv6Subnet} from './ipv6/ipv6';
+export {IPv6Network, IPv6Address} from './ipv6/ipv6';
 export {IPv6PrefixSize, bigIntToAddress, getSubnetBitmaskFromSlash, splitSlashSubnet} from './ipv6/ipv6-utils';
