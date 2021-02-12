@@ -41,10 +41,15 @@ export function splitSlashSubnet(originalSlash: number, numberOfSubnets: number)
 }
 
 export function bigIntToAddress(i: BigInteger, slash: number): IPv6Address {
-  return new IPv6Address(
-    `${i
-      .toString(16)
-      .match(/.{1,4}/g)
-      ?.join(':')}/${slash}`
-  );
+  const hex = i.toString(16);
+  let address: string;
+  if (hex === '0') {
+    address = `0::/${slash}`;
+  } else {
+    address = `${hex.match(/.{1,4}/g)?.join(':')}/${slash}`;
+  }
+
+  const out = new IPv6Address(address);
+
+  return out;
 }

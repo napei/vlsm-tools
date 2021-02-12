@@ -215,4 +215,15 @@ describe('IPv6 Subnetting', () => {
       expect(v.address).toEqual(expected[i]);
     });
   });
+
+  describe('Error handling', () => {
+    it('handles weird masking starting at 0::', () => {
+      expect(() => {
+        const result = new IPv6Network('2001:db8::/2').subdivideIntoNumSubnets(60);
+        console.log(result.map(r => r.address));
+      }).not.toThrow();
+    });
+
+    it('handles subnet splitting that does not fit', () => {});
+  });
 });
