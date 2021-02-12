@@ -215,11 +215,14 @@ describe('IPv6 Subnetting', () => {
   describe('Error handling', () => {
     it('handles weird masking starting at 0::', () => {
       expect(() => {
-        const result = new IPv6Network('2001:db8::/2').subdivideIntoNumSubnets(60);
-        console.log(result.map(r => r.address));
+        new IPv6Network('2001:db8::/2').subdivideIntoNumSubnets(2);
       }).not.toThrow();
     });
 
-    it('handles subnet splitting that does not fit', () => {});
+    it('handles subnet splitting that does not fit', () => {
+      expect(() => {
+        new IPv6Network('2001:db8::/127').subdivideIntoNumSubnets(20);
+      }).toThrow();
+    });
   });
 });

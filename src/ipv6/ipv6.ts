@@ -61,9 +61,6 @@ export class IPv6Network {
    * @memberof IPv6Network
    */
   constructor(majorNetwork: string) {
-    if (majorNetwork.indexOf('/') === -1) {
-      throw new Error('Address must be in CIDR slash notation');
-    }
     try {
       this.majorNetwork = new IPv6Address(majorNetwork);
     } catch (e) {
