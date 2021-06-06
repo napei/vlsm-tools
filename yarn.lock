@@ -1408,19 +1408,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"auto-changelog@npm:2.2.1":
-  version: 2.2.1
-  resolution: "auto-changelog@npm:2.2.1"
+"auto-changelog@npm:2.3.0":
+  version: 2.3.0
+  resolution: "auto-changelog@npm:2.3.0"
   dependencies:
     commander: ^5.0.0
     handlebars: ^4.7.3
-    lodash.uniqby: ^4.7.0
     node-fetch: ^2.6.0
     parse-github-url: ^1.0.2
     semver: ^6.3.0
   bin:
     auto-changelog: src/index.js
-  checksum: ab592dd898dcd46f3698b9e8e339b4dee4062d4434a6ee1364b624c4ebad10ea16440b5d2573901f4de29a9098ff198b6cfda7fd6711a4262e4023c3ce515b0a
+  checksum: be72ab29e68ced38e29ee668589533c6090b00745897bc18e3412be52c3f69f5ad98a5b0588789c872ad9f61777b0ca9903cf1437c809e749c8421eb6c31d39a
   languageName: node
   linkType: hard
 
@@ -4832,13 +4831,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"lodash.uniqby@npm:^4.7.0":
-  version: 4.7.0
-  resolution: "lodash.uniqby@npm:4.7.0"
-  checksum: bea225431a3623f440d8a719d7f0528de7872afe62645442ff37447ace25ef5237d41ed433cd676a345e83e6826836d746b4d629839f7196cf94258dbda81503
-  languageName: node
-  linkType: hard
-
 "lodash@npm:4.17.20, lodash@npm:4.x, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20":
   version: 4.17.20
   resolution: "lodash@npm:4.17.20"
@@ -7389,7 +7381,7 @@ typescript@4.1.5:
     "@types/jest": 26.0.20
     "@types/jsbn": 1.2.29
     "@types/node": 14.14.26
-    auto-changelog: 2.2.1
+    auto-changelog: 2.3.0
     gts: 3.1.0
     ip-address: 7.1.0
     jest: 26.6.3
